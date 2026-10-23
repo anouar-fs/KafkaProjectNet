@@ -60,7 +60,7 @@ jobs:
     steps:
       - name: Merge pull request
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PATH }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           GH_REPO: ${{ github.repository }}
         run: gh pr merge "$PR_NUMBER" --merge
