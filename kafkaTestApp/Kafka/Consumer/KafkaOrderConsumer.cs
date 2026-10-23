@@ -13,7 +13,7 @@ public class KafkaOrderConsumer : KafkaConsumerBase<OrderAv>
     }
     public override async Task ProcessMesage(OrderAv message)
     {
-        Console.WriteLine($"Processing: {message.Id} - { message.Product} - { message.Price} - { message.Quantity }");
+        Console.WriteLine($"This is the messaged that get processed : *ID  : {message.Id} - *Product : { message.Product} - *Price : { message.Price} - *Quantity : { message.Quantity }");
         await Task.Delay(1000);
         //throw new Exception("Erreur de traitement simulée");
     }
