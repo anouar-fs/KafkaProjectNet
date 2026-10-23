@@ -64,10 +64,12 @@ jobs:
 
       - name: Update Kubernetes deployment image
         env:
-          IMAGE_TAG: ${{ steps.meta.outputs.version }}
+          IMAGE_TAG: ${{ github.sha }}
         run: |
+          SHORT_SHA=$(echo "$IMAGE_TAG" | cut -c1-7)
+
           sed -i -E \
-            "s|^([[:space:]]*image:[[:space:]]*)ghcr.io/anouar-fs/kafkaprojectnet:.*|\1ghcr.io/anouar-fs/kafkaprojectnet:${IMAGE_TAG}|" \
+            "s|^([[:space:]]*image:[[:space:]]*)ghcr.io/anouar-fs/kafkaprojectnet:.*|\1ghcr.io/anouar-fs/kafkaprojectnet:sha-${SHORT_SHA}|" \
             gitops/application/deployment.yaml
 
       - name: Commit and push GitOps changes
