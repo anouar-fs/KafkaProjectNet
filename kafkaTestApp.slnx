@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="KafkaProj.Tests/KafkaProj.Tests.csproj" Id="3fe07cba-21be-4d9f-a038-f1fd65dd045b" />
+  <Project Path="kafkaTestApp/kafkaTestApp.csproj" />
+</Solution>
