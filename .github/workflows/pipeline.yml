@@ -28,8 +28,29 @@ jobs:
       - name: Build
         run: dotnet build --no-restore --configuration Release
 
-  merge:
+  test:
+    name: Run tests
     needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Run unit tests
+        run: dotnet test --no-restore --configuration Release --logger "console;verbosity=normal"
+
+  merge:
+    name: Merge pull request
+    needs: test
     if: github.event_name == 'pull_request' && github.event.action != 'closed'
     runs-on: ubuntu-latest
     permissions:
