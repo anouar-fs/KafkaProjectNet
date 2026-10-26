@@ -1,10 +1,10 @@
 name: Pipeline
-
+# trigger
 on:
   pull_request:
     branches:
       - main
-
+# workflow permet de lire les files
 permissions:
   contents: read
 
@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4 # download code in worker
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -23,10 +23,12 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore # resolves thee packages needd 
 
       - name: Build
         run: dotnet build --no-restore --configuration Release
+        #--no-restore : 	Skips dependency restoration (puisque c'est deja done)
+        #--configuration Release : 	not use Debug config
 
   test:
     name: Run tests
@@ -46,12 +48,12 @@ jobs:
         run: dotnet restore
 
       - name: Run unit tests
-        run: dotnet test --no-restore --configuration Release --logger "console;verbosity=normal"
+        run: dotnet test --no-restore --configuration Release --logger "console;verbosity=normal" # console the output with a normal level detail
 
   merge:
     name: Merge pull request
     needs: test
-    if: github.event_name == 'pull_request' && github.event.action != 'closed'
+    if: github.event_name == 'pull_request' && github.event.action != 'closed' #Run this only for Pull Request events that are not close
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -60,8 +62,7 @@ jobs:
     steps:
       - name: Merge pull request
         env:
-          GH_TOKEN: ${{ secrets.GH_PATH }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          GH_REPO: ${{ github.repository }}
-        run: gh pr merge "$PR_NUMBER" --merge
-
+          GH_TOKEN: ${{ secrets.GH_PATH }} #GitHub token used for authentication
+          PR_NUMBER: ${{ github.event.pull_request.number }} #Gets the Pull Request number
+          GH_REPO: ${{ github.repository }} #Gets the repository name
+        run: gh pr merge "$PR_NUMBER" --merge # c'est pour la fusionne de la PR sur Main dans la gh CLI
