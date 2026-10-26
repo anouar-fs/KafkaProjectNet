@@ -19,7 +19,7 @@ namespace kafkaTestApp.Controllers
         {
             try
             {
-                await this._kafkaService.SendMessageAsync(order);
+                await this._kafkaService.SendMessageAsync(order, "order-topic");
 
                 return Ok(order);
 

@@ -1,13 +1,14 @@
 ﻿using Confluent.Kafka;
 using kafkaTestApp.Kafka.Avro.Generated.KafkaApp;
 using kafkaTestApp.Kafka.dlqType;
+using kafkaTestApp.Kafka.Producer;
 
 namespace kafkaTestApp.Kafka.Consumer;
 
 public class KafkaOrderConsumer : KafkaConsumerBase<OrderAv>
 {
     public string topic = "order-topic";
-    public KafkaOrderConsumer(KafkaProducer<DlqType<OrderAv>> kafkaDlqProducer, IConsumer<Ignore, OrderAv> consumer) : base(kafkaDlqProducer,consumer)
+    public KafkaOrderConsumer(IKafkaProducer<DlqType<OrderAv>> kafkaDlqProducer, IConsumer<Ignore, OrderAv> consumer) : base(kafkaDlqProducer,consumer)
     {
         this._topic = topic;
     }
@@ -18,4 +19,3 @@ public class KafkaOrderConsumer : KafkaConsumerBase<OrderAv>
         //throw new Exception("Erreur de traitement simulée");
     }
 }
-

@@ -4,7 +4,7 @@ namespace kafkaTestApp.Mapper;
 
 public class OrderToOrderAv
 {
-    public OrderAv toOrderAv(OrderTest order)
+    public virtual OrderAv toOrderAv(OrderTest order)
     {
         return new OrderAv
         {
@@ -15,4 +15,3 @@ public class OrderToOrderAv
         };
     }
 }
-

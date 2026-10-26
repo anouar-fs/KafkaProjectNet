@@ -1,5 +1,4 @@
 
-using Avro;
 using Confluent.Kafka;
 using Confluent.Kafka.SyncOverAsync;
 using Confluent.SchemaRegistry;
@@ -7,9 +6,9 @@ using Confluent.SchemaRegistry.Serdes;
 using kafkaTestApp.Kafka.Avro.Generated.KafkaApp;
 using kafkaTestApp.Kafka.Consumer;
 using kafkaTestApp.Kafka.dlqType;
+using kafkaTestApp.Kafka.Producer;
 using kafkaTestApp.Mapper;
 using kafkaTestApp.Services;
-using static Confluent.Kafka.ConfigPropertyNames;
 
 var produceconfig = new ProducerConfig
 {
@@ -43,8 +42,8 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<KafkaProducer<OrderAv>>();
-builder.Services.AddSingleton<KafkaProducer<DlqType<OrderAv>>>();
+builder.Services.AddSingleton<IKafkaProducer<OrderAv>,KafkaProducer<OrderAv>>();
+builder.Services.AddSingleton<IKafkaProducer<DlqType<OrderAv>>,KafkaProducer<DlqType<OrderAv>>>();
 builder.Services.AddTransient<OrderToOrderAv>();
 builder.Services.AddScoped<KafkaService>();
 

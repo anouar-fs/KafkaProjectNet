@@ -1,22 +1,24 @@
 ﻿using Confluent.Kafka;
 using kafkaTestApp.Kafka.dlqType;
+using kafkaTestApp.Kafka.Producer;
 
 namespace kafkaTestApp.Kafka.Consumer;
-public abstract class KafkaConsumerBase<TPayload>: BackgroundService
+public abstract class KafkaConsumerBase<TPayload>: BackgroundService,IKafkaConsumerBase<TPayload>
 {
-    private readonly KafkaProducer<DlqType<TPayload>> _kafkaDlqProducer;
+    private readonly IKafkaProducer<DlqType<TPayload>> _kafkaDlqProducer;
     private readonly IConsumer<Ignore, TPayload> _consumer;
 
     public string _topic { get; set; } = string.Empty;
 
-    public KafkaConsumerBase(KafkaProducer<DlqType<TPayload>> kafkaDlqProducer, IConsumer<Ignore, TPayload> consumer) {
+    public KafkaConsumerBase(IKafkaProducer<DlqType<TPayload>> kafkaDlqProducer, IConsumer<Ignore, TPayload> consumer) {
         _kafkaDlqProducer = kafkaDlqProducer;
         _consumer = consumer;
     }
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        return Task.Run(()=> ConsumeMessages(stoppingToken),stoppingToken);
+        //return Task.Run(()=> ConsumeMessages(stoppingToken),stoppingToken);
+        return ConsumeMessages(stoppingToken);
     }
 
     public async Task ConsumeMessages(CancellationToken cancellationToken) {
@@ -66,7 +68,7 @@ public abstract class KafkaConsumerBase<TPayload>: BackgroundService
 
     }
 
-    private async Task ProcessMessageWithRetries(TPayload message)
+    public async Task ProcessMessageWithRetries(TPayload message)
     {
         int maxRetries = 3;
         for (int i = 0; i < maxRetries; i++) {

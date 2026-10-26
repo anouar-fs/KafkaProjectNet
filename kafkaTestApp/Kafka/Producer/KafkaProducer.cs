@@ -1,8 +1,9 @@
 ﻿using Confluent.Kafka;
+using kafkaTestApp.Kafka.Producer;
 
-public class KafkaProducer<TShema>
+public class KafkaProducer<TShema>:IKafkaProducer<TShema>   
 {
-    public readonly IProducer<Null, TShema> _producer;
+    private readonly IProducer<Null, TShema> _producer;
     public KafkaProducer(IProducer<Null, TShema> producer)
     {
         this._producer = producer;
